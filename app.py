@@ -103,6 +103,25 @@ def add_book():
     authors = db.session.execute(db.select(Author).order_by(Author.name)).scalars().all()
     return render_template('add_book.html', authors=authors, error=error), 400 if error else 200
 
+@app.route('/book/<int:book_id>/delete', methods=['POST'])
+def delete_book(book_id):
+    book = db.get_or_404(Book, book_id)
+    title = book.title
+    author = book.author
+    db.session.delete(book)
+    db.session.flush()
+
+    remaining_book = db.session.scalar(
+        db.select(Book.id).where(Book.author_id == author.id).limit(1)
+    )
+    if remaining_book is None:
+        db.session.delete(author)
+
+    db.session.commit()
+    flash(f'Book "{title}" deleted successfully!')
+    return redirect(url_for('home'))
+
+
 # Tables have been created. Uncomment these lines to initialize a new database.
 # with app.app_context():
 #     db.create_all()

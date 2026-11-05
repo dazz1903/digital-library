@@ -29,6 +29,9 @@
     <h2>{{ book.title }}</h2>
     <p>by {{ book.author.name }}</p>
     <p class="details">{{ book.publication_year }} · ISBN {{ book.isbn }}</p>
+    <form method="post" action="{{ url_for('delete_book', book_id=book.id) }}">
+      <button type="submit" aria-label="Delete Book: {{ book.title }}">Delete Book</button>
+    </form>
   </article>
   {% else %}
   {% if search %}
