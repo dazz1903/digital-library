@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block title %}Add author · My digital library{% endblock %}
+{% block content %}
+<h1>Add an author</h1>
+<p>Start with the person behind the books. Dates are optional.</p>
+<form method="post" class="entry-form">
+  <label for="name">Name</label>
+  <input id="name" name="name" required maxlength="200" value="{{ request.form.get('name', '') }}">
+  <label for="birth_date">Birth date</label>
+  <input type="date" id="birth_date" name="birth_date" value="{{ request.form.get('birth_date', '') }}">
+  <label for="date_of_death">Date of death</label>
+  <input type="date" id="date_of_death" name="date_of_death" value="{{ request.form.get('date_of_death', '') }}">
+  <button type="submit">Add author</button>
+</form>
+{% endblock %}

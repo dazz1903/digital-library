@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Your bookshelf</h1>
+<p>A little home for the stories you love.</p>
+<form method="get" class="sort-form">
+  <label for="sort">Sort books by</label>
+  <select id="sort" name="sort">
+    <option value="title" {% if sort == 'title' %}selected{% endif %}>Title</option>
+    <option value="author" {% if sort == 'author' %}selected{% endif %}>Author name</option>
+  </select>
+  <button type="submit">Sort</button>
+</form>
+<p>{{ books|length }} book{% if books|length != 1 %}s{% endif %}</p>
+<section class="books" aria-label="Books">
+  {% for book in books %}
+  <article class="book">
+    <div class="cover">
+      <img src="{{ book.isbn|cover_url }}" alt="Cover of {{ book.title }}" loading="lazy" onerror="this.hidden=true">
+      <span>Cover unavailable</span>
+    </div>
+    <h2>{{ book.title }}</h2>
+    <p>by {{ book.author.name }}</p>
+    <p class="details">{{ book.publication_year }} · ISBN {{ book.isbn }}</p>
+  </article>
+  {% else %}
+  <p>Your shelf is empty. <a href="{{ url_for('add_book') }}">Add your first book.</a></p>
+  {% endfor %}
+</section>
+<p class="details">Cover images supplied by Open Library.</p>
+{% endblock %}

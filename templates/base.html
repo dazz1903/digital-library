@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}My digital library{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header><a class="brand" href="{{ url_for('home') }}">My digital library</a>
+    <nav aria-label="Main navigation">
+      <a href="{{ url_for('home') }}">Bookshelf</a>
+      <a href="{{ url_for('add_author') }}">Add author</a>
+      <a href="{{ url_for('add_book') }}">Add book</a>
+    </nav>
+  </header>
+  <main>
+    {% for message in get_flashed_messages() %}<p class="success" role="status">{{ message }}</p>{% endfor %}
+    {% if error %}<p class="error" role="alert">{{ error }}</p>{% endif %}
+    {% block content %}{% endblock %}
+  </main>
+</body>
+</html>

@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block title %}Add book · My digital library{% endblock %}
+{% block content %}
+<h1>Add a book</h1>
+{% if authors %}
+<form method="post" class="entry-form">
+  <label for="title">Title</label>
+  <input id="title" name="title" required maxlength="300" value="{{ request.form.get('title', '') }}">
+  <label for="isbn">ISBN</label>
+  <input id="isbn" name="isbn" required maxlength="20" placeholder="10 or 13 characters" value="{{ request.form.get('isbn', '') }}">
+  <label for="publication_year">Publication year</label>
+  <input type="number" id="publication_year" name="publication_year" required min="1" max="9999" value="{{ request.form.get('publication_year', '') }}">
+  <label for="author_id">Author</label>
+  <select id="author_id" name="author_id" required>
+    <option value="">Choose an author</option>
+    {% for author in authors %}
+    <option value="{{ author.id }}" {% if request.form.get('author_id') == author.id|string %}selected{% endif %}>{{ author.name }}</option>
+    {% endfor %}
+  </select>
+  <button type="submit">Add book</button>
+</form>
+{% else %}
+<p><a href="{{ url_for('add_author') }}">Add an author</a> before adding your first book.</p>
+{% endif %}
+{% endblock %}
