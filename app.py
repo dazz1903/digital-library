@@ -1,7 +1,6 @@
 import os
 
 from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
 
 from data_models import db, Author, Book
 
@@ -14,3 +13,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = (
 )
 
 db.init_app(app)
+
+# Tables have been created. Uncomment these lines to initialize a new database.
+# with app.app_context():
+#     db.create_all()
