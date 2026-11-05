@@ -4,8 +4,10 @@ from urllib.parse import quote
 
 from flask import Flask, flash, redirect, render_template, request, url_for
 from sqlalchemy.exc import IntegrityError
+from openai import OpenAIError
 
 from data_models import db, Author, Book
+from recommendations import recommend_books
 
 
 app = Flask(__name__)
@@ -120,6 +122,80 @@ def delete_book(book_id):
     db.session.commit()
     flash(f'Book "{title}" deleted successfully!')
     return redirect(url_for('home'))
+
+
+@app.route('/book/<int:book_id>')
+def book_detail(book_id):
+    return render_template('book_detail.html', book=db.get_or_404(Book, book_id))
+
+
+@app.route('/author/<int:author_id>')
+def author_detail(author_id):
+    author = db.get_or_404(Author, author_id)
+    books = db.session.scalars(
+        db.select(Book).where(Book.author_id == author_id).order_by(Book.title)
+    ).all()
+    return render_template('author_detail.html', author=author, books=books)
+
+
+@app.route('/author/<int:author_id>/delete', methods=['POST'])
+def delete_author(author_id):
+    author = db.get_or_404(Author, author_id)
+    name = author.name
+    db.session.delete(author)
+    db.session.commit()
+    flash(f'Author "{name}" and all their books deleted successfully!')
+    return redirect(url_for('home'))
+
+
+@app.route('/book/<int:book_id>/rate', methods=['POST'])
+def rate_book(book_id):
+    book = db.get_or_404(Book, book_id)
+    value = request.form.get('rating', '').strip()
+    try:
+        rating = int(value) if value else None
+        if rating is not None and not 1 <= rating <= 10:
+            raise ValueError
+    except ValueError:
+        return render_template('book_detail.html', book=book,
+                               error='Choose a whole-number rating from 1 to 10.'), 400
+    book.rating = rating
+    db.session.commit()
+    flash('Rating saved!' if rating else 'Rating removed.')
+    return redirect(url_for('book_detail', book_id=book.id))
+
+
+@app.route('/recommend', methods=['GET', 'POST'])
+def recommend():
+    books = db.session.scalars(
+        db.select(Book).options(db.joinedload(Book.author)).order_by(Book.id)
+    ).all()
+    configured = bool(os.environ.get('OPENAI_API_KEY', '').strip())
+    result = None
+    error = None
+    status = 200
+    if request.method == 'POST':
+        preferences = request.form.get('preferences', '').strip()
+        if not books:
+            error = 'Add at least one book before requesting recommendations.'
+            status = 400
+        elif not configured:
+            error = 'AI recommendations are not configured yet. See the project README.'
+            status = 503
+        elif len(preferences) > 1000:
+            error = 'Keep your preferences to 1,000 characters or fewer.'
+            status = 400
+        else:
+            try:
+                result = recommend_books(books, preferences)
+            except OpenAIError:
+                error = 'The AI service is unavailable. Check your API access and try again.'
+                status = 502
+            except ValueError as exception:
+                error = str(exception)
+                status = 502
+    return render_template('recommend.html', books=books, configured=configured,
+                           result=result, error=error), status
 
 
 # Tables have been created. Uncomment these lines to initialize a new database.

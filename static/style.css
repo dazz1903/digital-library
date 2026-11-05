@@ -1,28 +1,60 @@
-:root { font-family: system-ui, sans-serif; color: #243b35; background: #f6f3eb; }
+:root { font-family: system-ui, sans-serif; color: #302e27; background: #f8f5ed; line-height: 1.6; }
 * { box-sizing: border-box; }
 body { margin: 0; }
-header { padding: 24px max(24px, calc((100% - 1100px) / 2)); background: #213e35; color: white; display: flex; gap: 24px; justify-content: space-between; flex-wrap: wrap; }
-header a { color: white; text-decoration: none; }
-.brand { font-family: Georgia, serif; font-size: 24px; }
-nav { display: flex; gap: 20px; align-items: center; }
-main { max-width: 1100px; margin: 40px auto; padding: 0 24px; }
-h1 { font: 42px Georgia, serif; margin-bottom: 12px; }
-a { color: #23624c; }
-.books { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 24px; }
-.book { padding: 24px; background: white; border: 1px solid #dddccf; border-radius: 10px; }
-.book h2 { font: 23px Georgia, serif; margin-bottom: 8px; }
-.cover { height: 220px; display: grid; place-items: center; background: #eeeade; position: relative; }
-.cover img { width: 100%; height: 220px; object-fit: contain; position: absolute; background: #eeeade; }
+header { padding: 26px max(24px, calc((100% - 1160px) / 2)); border-bottom: 1px solid #dfd9cc; display: flex; gap: 24px; justify-content: space-between; flex-wrap: wrap; background: #fdfbf6; }
+header a { text-decoration: none; }
+.brand { font: 28px Georgia, serif; color: #293e34; }
+.brand span { display: block; font: 10px system-ui, sans-serif; text-transform: uppercase; letter-spacing: .2em; margin-top: 8px; }
+nav { display: flex; gap: 22px; align-items: center; flex-wrap: wrap; font-size: 14px; }
+main { max-width: 1160px; margin: 36px auto 72px; padding: 0 24px; }
+h1, h2 { font-family: Georgia, serif; font-weight: normal; line-height: 1.15; }
+h1 { font-size: clamp(36px, 5vw, 58px); margin: 12px 0 20px; }
+h2 { font-size: 28px; }
+a { color: #315640; text-underline-offset: 4px; }
+a:hover { color: #955234; }
+.hero { padding: 48px; background: #e5eadf; border-radius: 16px; margin-bottom: 44px; background-image: radial-gradient(ellipse at right bottom, #bdcbb7 0, transparent 65%); }
+.hero h1 { max-width: 700px; font-size: clamp(40px, 6vw, 70px); color: #294235; }
+.hero p { max-width: 560px; }
+.eyebrow { font-size: 11px; text-transform: uppercase; letter-spacing: .18em; font-weight: 650; color: #52654d; }
+.hero .button { margin-top: 16px; }
+.section-heading { display: flex; gap: 16px; align-items: center; }
+.badge { background: #e9e4d8; border-radius: 30px; padding: 4px 12px; font-size: 12px; }
+.books { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; margin-top: 28px; }
+.book { padding: 20px; background: #fffdf8; border: 1px solid #e3ddcf; border-radius: 12px; box-shadow: 0 5px 18px #4b382008; }
+.book h2 { font-size: 25px; margin: 20px 0 8px; }
+.book h2 a { color: inherit; text-decoration: none; }
+.book p { margin: 8px 0; }
+.book form { display: inline-block; margin-right: 6px; }
+.cover { height: 240px; display: grid; place-items: center; background: #eee9dd; position: relative; border-radius: 6px; overflow: hidden; }
+.cover img { width: 100%; height: 100%; padding: 14px; object-fit: contain; position: absolute; background: #eee9dd; }
 .cover img[hidden] { display: none; }
-.cover span, .details { font-size: 13px; color: #626d66; overflow-wrap: anywhere; }
-.entry-form { max-width: 500px; display: grid; gap: 12px; }
-input, select, button { font: inherit; padding: 11px 14px; border: 1px solid #a6b3a9; border-radius: 5px; }
-input, select { background: white; min-width: 0; }
-button { background: #275e47; color: white; cursor: pointer; }
-button:hover { background: #183e2d; }
-.entry-form button { margin-top: 12px; }
-.sort-form { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin: 28px 0; }
-.success, .error { padding: 16px; border-radius: 5px; }
-.success { background: #dfeede; }
+.cover span, .details { font-size: 12px; color: #706c62; overflow-wrap: anywhere; }
+.rating { color: #835c24; font-size: 14px; }
+.entry-form { max-width: 540px; display: grid; gap: 12px; padding: 28px; background: #fffdf8; border: 1px solid #e3ddcf; border-radius: 12px; margin: 28px 0; }
+input, select, textarea, button, .button { font: inherit; padding: 11px 14px; border: 1px solid #bdb8aa; border-radius: 6px; }
+input, select, textarea { background: #fffefb; min-width: 0; color: inherit; }
+textarea { resize: vertical; }
+button, .button { background: #315640; color: white; cursor: pointer; text-decoration: none; display: inline-block; }
+button:hover, .button:hover { background: #23402e; color: white; }
+.danger { color: #884b3b; background: transparent; border-color: #decec3; font-size: 12px; padding: 7px 10px; margin-top: 12px; }
+.danger:hover { background: #f6e7de; color: #743729; }
+.sort-form { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin: 18px 0; }
+.success, .error, .notice { padding: 18px 22px; border-radius: 8px; }
+.success { background: #e0eddb; }
 .error { background: #f9dfd8; color: #7c241a; }
+.notice { background: #eee9dc; margin-top: 28px; }
+.back { display: inline-block; margin-bottom: 28px; font-size: 14px; }
+.detail-layout { display: grid; grid-template-columns: 300px 1fr; gap: 48px; }
+.detail-cover { height: 420px; }
+.byline { font-size: 20px; }
+dl { display: grid; grid-template-columns: 140px 1fr; gap: 10px; margin: 24px 0; }
+dt { color: #706c62; } dd { margin: 0; }
+.author-books { list-style: none; padding: 0; max-width: 700px; }
+.author-books li { padding: 18px 0; border-bottom: 1px solid #ddd6c9; display: flex; gap: 18px; justify-content: space-between; flex-wrap: wrap; }
+.author-books span { font-size: 13px; color: #706c62; }
+.recommendation { padding: 30px; background: #e7edde; border-radius: 12px; margin-top: 32px; }
+.recommendation-text { white-space: pre-wrap; overflow-wrap: anywhere; }
+footer { padding: 26px; text-align: center; font-size: 12px; color: #706c62; border-top: 1px solid #dfd9cc; }
 :focus-visible { outline: 3px solid #b57822; outline-offset: 3px; }
+@media (max-width: 850px) { .books { grid-template-columns: repeat(2, minmax(0, 1fr)); } .detail-layout { grid-template-columns: 220px 1fr; gap: 24px; } }
+@media (max-width: 580px) { .books, .detail-layout { grid-template-columns: 1fr; } .hero { padding: 28px; } nav { gap: 16px; } .entry-form { padding: 20px; } .sort-form input[type=search] { width: 100%; } .detail-cover { max-width: 300px; } dl { grid-template-columns: 120px 1fr; } }

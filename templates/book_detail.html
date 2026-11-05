@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block title %}{{ book.title }} · The Reading Room{% endblock %}
+{% block content %}
+<a class="back" href="{{ url_for('home') }}">← Back to bookshelf</a>
+<section class="detail-layout">
+  <div class="cover detail-cover">
+    <img src="{{ book.isbn|cover_url }}" alt="Cover of {{ book.title }}" onerror="this.hidden=true">
+    <span>Cover unavailable</span>
+  </div>
+  <div>
+    <p class="eyebrow">On your shelf</p>
+    <h1>{{ book.title }}</h1>
+    <p class="byline">by <a href="{{ url_for('author_detail', author_id=book.author.id) }}">{{ book.author.name }}</a></p>
+    <dl><dt>Publication year</dt><dd>{{ book.publication_year }}</dd><dt>ISBN</dt><dd>{{ book.isbn }}</dd><dt>Your rating</dt><dd>{{ (book.rating|string ~ '/10') if book.rating else 'Not rated yet' }}</dd></dl>
+    <form method="post" action="{{ url_for('rate_book', book_id=book.id) }}" class="entry-form rating-form">
+      <label for="rating">How did you like this book?</label>
+      <select id="rating" name="rating">
+        <option value="">Not rated</option>
+        {% for value in range(1, 11) %}<option value="{{ value }}" {% if book.rating == value %}selected{% endif %}>{{ value }} / 10</option>{% endfor %}
+      </select>
+      <button type="submit">Save rating</button>
+    </form>
+    <form method="post" action="{{ url_for('delete_book', book_id=book.id) }}"><button class="danger" type="submit">Delete Book</button></form>
+  </div>
+</section>
+{% endblock %}

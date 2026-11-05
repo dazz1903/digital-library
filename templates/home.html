@@ -1,7 +1,12 @@
 {% extends 'base.html' %}
 {% block content %}
-<h1>Your bookshelf</h1>
-<p>A little home for the stories you love.</p>
+<section class="hero">
+  <p class="eyebrow">Collected stories, endless possibilities</p>
+  <h1>Your next chapter<br>starts here.</h1>
+  <p>A shelf of old favorites. A little space for something new.</p>
+  <a class="button" href="{{ url_for('add_book') }}">+ Add to your shelf</a>
+</section>
+<div class="section-heading"><h2>Your bookshelf</h2><span class="badge">{{ books|length }} book{% if books|length != 1 %}s{% endif %}</span></div>
 <form method="get" class="sort-form" role="search">
   <label for="search">Search book titles</label>
   <input type="search" id="search" name="search" value="{{ search }}" placeholder="Enter a word or phrase">
@@ -18,7 +23,6 @@
   </select>
   <button type="submit">Sort</button>
 </form>
-<p>{{ books|length }} book{% if books|length != 1 %}s{% endif %}</p>
 <section class="books" aria-label="Books">
   {% for book in books %}
   <article class="book">
@@ -26,11 +30,15 @@
       <img src="{{ book.isbn|cover_url }}" alt="Cover of {{ book.title }}" loading="lazy" onerror="this.hidden=true">
       <span>Cover unavailable</span>
     </div>
-    <h2>{{ book.title }}</h2>
-    <p>by {{ book.author.name }}</p>
+    <h2><a href="{{ url_for('book_detail', book_id=book.id) }}">{{ book.title }}</a></h2>
+    <p>by <a href="{{ url_for('author_detail', author_id=book.author.id) }}">{{ book.author.name }}</a></p>
+    <p class="rating">{% if book.rating %}★ {{ book.rating }}/10{% else %}<a href="{{ url_for('book_detail', book_id=book.id) }}">Add your rating</a>{% endif %}</p>
     <p class="details">{{ book.publication_year }} · ISBN {{ book.isbn }}</p>
     <form method="post" action="{{ url_for('delete_book', book_id=book.id) }}">
-      <button type="submit" aria-label="Delete Book: {{ book.title }}">Delete Book</button>
+      <button class="danger" type="submit" aria-label="Delete Book: {{ book.title }}">Delete Book</button>
+    </form>
+    <form method="post" action="{{ url_for('delete_author', author_id=book.author.id) }}" onsubmit="return confirm('Delete this author and ALL their books?')">
+      <button class="danger" type="submit" aria-label="Delete Author: {{ book.author.name }}">Delete Author</button>
     </form>
   </article>
   {% else %}
@@ -41,5 +49,4 @@
   {% endif %}
   {% endfor %}
 </section>
-<p class="details">Cover images supplied by Open Library.</p>
 {% endblock %}

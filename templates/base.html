@@ -7,11 +7,12 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-  <header><a class="brand" href="{{ url_for('home') }}">My digital library</a>
+  <header><a class="brand" href="{{ url_for('home') }}">The Reading Room<span>A personal library</span></a>
     <nav aria-label="Main navigation">
       <a href="{{ url_for('home') }}">Bookshelf</a>
       <a href="{{ url_for('add_author') }}">Add author</a>
       <a href="{{ url_for('add_book') }}">Add book</a>
+      <a href="{{ url_for('recommend') }}">Find my next read</a>
     </nav>
   </header>
   <main>
@@ -19,5 +20,6 @@
     {% if error %}<p class="error" role="alert">{{ error }}</p>{% endif %}
     {% block content %}{% endblock %}
   </main>
+  <footer>A place for every story. <a href="https://openlibrary.org/">Covers by Open Library</a></footer>
 </body>
 </html>

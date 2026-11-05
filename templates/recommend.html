@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block title %}Find my next read · The Reading Room{% endblock %}
+{% block content %}
+<p class="eyebrow">A little inspiration</p>
+<h1>Find your next read.</h1>
+<p>Let your bookshelf lead you somewhere new. Higher-rated books help shape your recommendations.</p>
+{% if not books %}
+<p><a href="{{ url_for('add_book') }}">Add a book</a> to get started.</p>
+{% elif not configured %}
+<div class="notice"><h2>AI recommendations need setup</h2><p>Configure your OpenAI API key using the instructions in the project README, then restart the app.</p></div>
+{% else %}
+<form method="post" class="entry-form">
+  <label for="preferences">Anything you are in the mood for? (optional)</label>
+  <textarea id="preferences" name="preferences" rows="4" maxlength="1000" placeholder="A thoughtful mystery, something uplifting…">{{ request.form.get('preferences', '') }}</textarea>
+  <p class="details">Generate sends all {{ books|length }} book titles, authors, publication years, ratings, and your preferences to OpenAI. API usage may incur charges.</p>
+  <button type="submit">Generate recommendations</button>
+</form>
+{% endif %}
+{% if result %}<section class="recommendation" aria-live="polite"><h2>Your next chapter</h2><div class="recommendation-text">{{ result }}</div><p class="details">AI suggestions can contain mistakes. Check book details before buying.</p></section>{% endif %}
+{% endblock %}

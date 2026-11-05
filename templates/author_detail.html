@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block title %}{{ author.name }} · The Reading Room{% endblock %}
+{% block content %}
+<a class="back" href="{{ url_for('home') }}">← Back to bookshelf</a>
+<p class="eyebrow">Behind the stories</p>
+<h1>{{ author.name }}</h1>
+<dl><dt>Born</dt><dd>{{ author.birth_date or 'Not recorded' }}</dd><dt>Date of death</dt><dd>{{ author.date_of_death or 'Not recorded' }}</dd></dl>
+<h2>Books in your library</h2>
+<ul class="author-books">
+  {% for book in books %}<li><a href="{{ url_for('book_detail', book_id=book.id) }}">{{ book.title }}</a><span>{{ book.publication_year }}{% if book.rating %} · ★ {{ book.rating }}/10{% endif %}</span></li>
+  {% else %}<li>No books by this author yet.</li>{% endfor %}
+</ul>
+<form method="post" action="{{ url_for('delete_author', author_id=author.id) }}" onsubmit="return confirm('Delete this author and ALL their books?')">
+  <p class="details">Deleting this author also removes all {{ books|length }} of their books from your library.</p>
+  <button class="danger" type="submit">Delete Author</button>
+</form>
+{% endblock %}
