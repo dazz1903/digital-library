@@ -21,15 +21,18 @@ db.init_app(app)
 
 @app.route('/')
 def home():
+    search = request.args.get('search', '').strip()
     sort = request.args.get('sort', 'title')
     if sort not in ('title', 'author'):
         sort = 'title'
     order_column = Author.name if sort == 'author' else Book.title
+    query = db.select(Book).join(Author).options(db.joinedload(Book.author))
+    if search:
+        query = query.where(Book.title.icontains(search, autoescape=True))
     books = db.session.execute(
-        db.select(Book).join(Author).options(db.joinedload(Book.author))
-        .order_by(db.func.lower(order_column), Book.title, Book.id)
+        query.order_by(db.func.lower(order_column), Book.title, Book.id)
     ).scalars().all()
-    return render_template('home.html', books=books, sort=sort)
+    return render_template('home.html', books=books, sort=sort, search=search)
 
 
 @app.template_filter('cover_url')
